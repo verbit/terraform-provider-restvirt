@@ -1,0 +1,39 @@
+#cloud-config
+
+users:
+  - default
+  - name: me
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCxsCr8qXFta4dDbfKXR4fNQrw5m4bvaVjNg6S4/nmJeADGWwOswiDqRU1U/T9la0iNY/KTDo4BaR7yIU8UBeCfJDIvDJmw5VtRI4aK6aTnYZ/Fbr3CkRDCFfnt4Vh/VT9tKcR2VWfJapeCCvBFPHhxkRkHfs1PKgE8eQsxYhOpx5ta4mELCdFMNlnud62CB5naJxP/wV45Sj6YsHCmnd9WKknWmnSD/+T/nmHHBAcD2Bih1VmP5Dcl3oe8yxs9+sbi4CSUlP7whN23GnDX1WDYoMyPqChHFyRorRQyvNvu3OOJcCibAgiiuy0gxxeHhl76FyEGCirat4PCmiNVxkAn me@home.world
+
+apt:
+  sources:
+    kubernetes:
+      source: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
+      key: |
+        -----BEGIN PGP PUBLIC KEY BLOCK-----
+
+        mQENBFrBaNsBCADrF18KCbsZlo4NjAvVecTBCnp6WcBQJ5oSh7+E98jX9YznUCrN
+        rgmeCcCMUvTDRDxfTaDJybaHugfba43nqhkbNpJ47YXsIa+YL6eEE9emSmQtjrSW
+        IiY+2YJYwsDgsgckF3duqkb02OdBQlh6IbHPoXB6H//b1PgZYsomB+841XW1LSJP
+        YlYbIrWfwDfQvtkFQI90r6NknVTQlpqQh5GLNWNYqRNrGQPmsB+NrUYrkl1nUt1L
+        RGu+rCe4bSaSmNbwKMQKkROE4kTiB72DPk7zH4Lm0uo0YFFWG4qsMIuqEihJ/9KN
+        X8GYBr+tWgyLooLlsdK3l+4dVqd8cjkJM1ExABEBAAG0QEdvb2dsZSBDbG91ZCBQ
+        YWNrYWdlcyBBdXRvbWF0aWMgU2lnbmluZyBLZXkgPGdjLXRlYW1AZ29vZ2xlLmNv
+        bT6JATgEEwECACwFAlrBaNsJEGoDCyG6B/T7AhsPBQkFo5qABgsJCAcDAgYVCAIJ
+        CgsEFgIDAQAAJr4IAM5lgJ2CTkTRu2iw+tFwb90viLR6W0N1CiSPUwi1gjEKMr5r
+        0aimBi6FXiHTuX7RIldSNynkypkZrNAmTMM8SU+sri7R68CFTpSgAvW8qlnlv2iw
+        rEApd/UxxzjYaq8ANcpWAOpDsHeDGYLCEmXOhu8LmmpY4QqBuOCM40kuTDRd52PC
+        JE6b0V1t5zUqdKeKZCPQPhsS/9rdYP9yEEGdsx0V/Vt3C8hjv4Uwgl8Fa3s/4ag6
+        lgIf+4SlkBAdfl/MTuXu/aOhAWQih444igB+rvFaDYIhYosVhCxP4EUAfGZk+qfo
+        2mCY3w1pte31My+vVNceEZSUpMetSfwit3QA8EE=
+        =csu4
+        -----END PGP PUBLIC KEY BLOCK-----
+
+package_upgrade: true
+packages:
+  - jq
+  - kubectl
+  - docker.io
