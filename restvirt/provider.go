@@ -16,7 +16,7 @@ func Provider() *schema.Provider {
 		Schema: map[string]*schema.Schema{
 			"host": {
 				Type:     schema.TypeString,
-				Required: true,
+				Optional: true,
 			},
 			"username": {
 				Type:     schema.TypeString,
