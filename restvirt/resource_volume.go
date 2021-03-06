@@ -79,6 +79,9 @@ func resourceVolumeDelete(ctx context.Context, d *schema.ResourceData, m interfa
 	var diags diag.Diagnostics
 
 	err := c.DeleteVolume(d.Id())
+	if _, notFound := err.(*restvirt.NotFoundError); notFound {
+		return diags
+	}
 	if err != nil {
 		return diag.FromErr(err)
 	}

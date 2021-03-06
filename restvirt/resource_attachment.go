@@ -93,6 +93,9 @@ func resourceAttachmentDelete(ctx context.Context, d *schema.ResourceData, m int
 	volumeID := attachmentID[1]
 
 	err := c.DeleteAttachment(domainID, volumeID)
+	if _, notFound := err.(*restvirt.NotFoundError); notFound {
+		return diags
+	}
 	if err != nil {
 		return diag.FromErr(err)
 	}

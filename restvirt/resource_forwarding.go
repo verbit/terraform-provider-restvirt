@@ -87,6 +87,9 @@ func resourceForwardingDelete(ctx context.Context, d *schema.ResourceData, m int
 	var diags diag.Diagnostics
 
 	err := c.DeletePortForwarding(d.Id())
+	if _, notFound := err.(*restvirt.NotFoundError); notFound {
+		return diags
+	}
 	if err != nil {
 		return diag.FromErr(err)
 	}
