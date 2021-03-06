@@ -28,3 +28,12 @@ Run the following command to initialize the workspace and apply the sample confi
 ```shell
 $ terraform init && terraform apply
 ```
+
+
+## Installation
+
+If you have `jq` installed, you can use this one-liner to install the latest version of this plugin to `~/.terraform.d/plugins/`:
+```shell
+curl -sfL https://raw.githubusercontent.com/verbit/terraform-provider-restvirt/main/hack/install_latest.sh | sh -
+```
+Take a look at [hack/install_latest.sh](hack/install_latest.sh) to see what the script does.
