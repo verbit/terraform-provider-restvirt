@@ -39,5 +39,5 @@ output "disk_address" {
 }
 
 output "uuid" {
-  value = restvirt_domain.master.id
+  value = restvirt_domain.test.id
 }
