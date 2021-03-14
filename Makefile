@@ -3,7 +3,7 @@ HOSTNAME=github.com
 NAMESPACE=verbit
 NAME=restvirt
 BINARY=terraform-provider-${NAME}
-VERSION=0.0.1
+VERSION=0.1.0
 OS_ARCH=darwin_amd64
 
 default: install
@@ -34,4 +34,4 @@ test:
 	echo $(TEST) | xargs -t -n4 go test $(TESTARGS) -timeout=30s -parallel=4                    
 
 testacc: 
-	TF_ACC=1 go test $(TEST) -v $(TESTARGS) -timeout 120m   
+	TF_ACC=1 go test $(TEST) -v $(TESTARGS) -timeout 120m

@@ -290,8 +290,8 @@ github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/
 github.com/ulikunitz/xz v0.5.5/go.mod h1:2bypXElzHzzJZwzH67Y6wb67pO62Rzfn7BSiF4ABRW8=
 github.com/ulikunitz/xz v0.5.8 h1:ERv8V6GKqVi23rgu5cj9pVfVzJbOqAY2Ntl88O6c2nQ=
 github.com/ulikunitz/xz v0.5.8/go.mod h1:nbz6k7qbPmH4IRqmfOplQw/tblSgqTqBwxkY0oWt/14=
-github.com/verbit/restvirt-client v0.0.0-20210303222050-fa408d171bb2 h1:7FthLTpxWhZBma5YasxdnmDhTg8lfe06XmATLgzP3hk=
-github.com/verbit/restvirt-client v0.0.0-20210303222050-fa408d171bb2/go.mod h1:Xbw5fkgCDvKyssys7xZmxLe/J3Z0MPNWWW6eX0e96RA=
+github.com/verbit/restvirt-client v0.1.0 h1:IyHrGCHRz0ZBsXm0Sb9pOTiG5Qq0Mux9oSg0xd0wShg=
+github.com/verbit/restvirt-client v0.1.0/go.mod h1:Xbw5fkgCDvKyssys7xZmxLe/J3Z0MPNWWW6eX0e96RA=
 github.com/vmihailenco/msgpack v3.3.3+incompatible/go.mod h1:fy3FlTQTDXWkZ7Bh6AcGMlsjHatGryHQYUTf1ShIgkk=
 github.com/vmihailenco/msgpack v4.0.4+incompatible h1:dSLoQfGFAo3F6OoNhwUmLwVgaUXK79GlxNBwueZn0xI=
 github.com/vmihailenco/msgpack v4.0.4+incompatible/go.mod h1:fy3FlTQTDXWkZ7Bh6AcGMlsjHatGryHQYUTf1ShIgkk=
