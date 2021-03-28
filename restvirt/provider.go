@@ -34,6 +34,7 @@ func Provider() *schema.Provider {
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"restvirt_domain":     resourceDomain(),
+			"restvirt_dns":        resourceDNSMapping(),
 			"restvirt_forwarding": resourceForwarding(),
 			"restvirt_volume":     resourceVolume(),
 			"restvirt_attachment": resourceAttachment(),
