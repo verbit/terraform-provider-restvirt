@@ -2,10 +2,10 @@ package restvirt
 
 import (
 	"context"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/verbit/restvirt-client"
-	"strconv"
 )
 
 func resourceForwarding() *schema.Resource {
@@ -29,6 +29,11 @@ func resourceForwarding() *schema.Resource {
 				Required: true,
 				ForceNew: true,
 			},
+			"protocol": {
+				Type:     schema.TypeString,
+				Required: true,
+				ForceNew: true,
+			},
 		},
 	}
 }
@@ -43,6 +48,7 @@ func resourceForwardingCreate(ctx context.Context, d *schema.ResourceData, m int
 		SourcePort: uint16(d.Get("source_port").(int)),
 		TargetIP:   d.Get("target_ip").(string),
 		TargetPort: uint16(d.Get("target_port").(int)),
+		Protocol:   d.Get("protocol").(string),
 	}
 
 	id, err := c.CreatePortForwarding(forwarding)
@@ -72,10 +78,11 @@ func resourceForwardingRead(ctx context.Context, d *schema.ResourceData, m inter
 		return diag.FromErr(err)
 	}
 
-	d.SetId(strconv.Itoa(int(forwarding.SourcePort)))
+	d.SetId(d.Id())
 	d.Set("source_port", forwarding.SourcePort)
 	d.Set("target_ip", forwarding.TargetIP)
 	d.Set("target_port", forwarding.TargetPort)
+	d.Set("protocol", forwarding.Protocol)
 
 	return diags
 }
