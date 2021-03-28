@@ -28,7 +28,7 @@ func Provider() *schema.Provider {
 				Sensitive: true,
 			},
 			"ca": {
-				Type: schema.TypeString,
+				Type:     schema.TypeString,
 				Optional: true,
 			},
 		},
