@@ -11,7 +11,7 @@ import (
 func resourceDNSRecord() *schema.Resource {
 	return &schema.Resource{
 		CreateContext: resourceDNSRecordCreate,
-		UpdateContext: resourceDomainCreate,
+		UpdateContext: resourceDNSRecordCreate,
 		ReadContext:   resourceDNSRecordRead,
 		DeleteContext: resourceDNSRecordDelete,
 		Schema: map[string]*schema.Schema{
