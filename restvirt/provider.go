@@ -38,6 +38,7 @@ func Provider() *schema.Provider {
 			"restvirt_forwarding": resourceForwarding(),
 			"restvirt_volume":     resourceVolume(),
 			"restvirt_attachment": resourceAttachment(),
+			"restvirt_route_table": resourceRouteTable(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"restvirt_domain": dataSourceDomain(),
