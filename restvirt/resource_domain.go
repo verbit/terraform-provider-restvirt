@@ -8,6 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/verbit/restvirt-client"
+	"github.com/verbit/restvirt-client/pb"
 )
 
 func userDataHashSum(d interface{}) string {
@@ -50,6 +51,12 @@ func resourceDomain() *schema.Resource {
 				ForceNew:  true,
 				StateFunc: userDataHashSum,
 			},
+			"nested_virtualization": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				ForceNew: true,
+				Default:  false,
+			},
 		},
 	}
 }
@@ -60,20 +67,21 @@ func resourceDomainCreate(ctx context.Context, d *schema.ResourceData, m interfa
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	domain := restvirt.Domain{
-		Name:      d.Get("name").(string),
-		VCPU:      d.Get("vcpu").(int),
-		MemoryMiB: d.Get("memory").(int),
-		UserData:  d.Get("user_data").(string),
-		PrivateIP: d.Get("private_ip").(string),
-	}
-
-	id, err := c.CreateDomain(domain)
+	resp, err := c.DomainServiceClient.CreateDomain(context.Background(), &pb.CreateDomainRequest{
+		Domain: &pb.Domain{
+			Name:                 d.Get("name").(string),
+			Vcpu:                 uint32(d.Get("vcpu").(int)),
+			Memory:               uint64(d.Get("memory").(int)),
+			UserData:             d.Get("user_data").(string),
+			PrivateIp:            d.Get("private_ip").(string),
+			NestedVirtualization: d.Get("nested_virtualization").(bool),
+		},
+	})
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(id)
+	d.SetId(resp.Uuid)
 
 	resourceDomainRead(ctx, d, m)
 
