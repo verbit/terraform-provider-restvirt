@@ -33,11 +33,12 @@ func Provider() *schema.Provider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"restvirt_domain":     resourceDomain(),
-			"restvirt_dns_record": resourceDNSRecord(),
-			"restvirt_forwarding": resourceForwarding(),
-			"restvirt_volume":     resourceVolume(),
-			"restvirt_attachment": resourceAttachment(),
+			"restvirt_domain":      resourceDomain(),
+			"restvirt_network":     resourceNetwork(),
+			"restvirt_dns_record":  resourceDNSRecord(),
+			"restvirt_forwarding":  resourceForwarding(),
+			"restvirt_volume":      resourceVolume(),
+			"restvirt_attachment":  resourceAttachment(),
 			"restvirt_route_table": resourceRouteTable(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{

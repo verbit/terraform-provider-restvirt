@@ -8,6 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/verbit/restvirt-client"
+	"github.com/verbit/restvirt-client/pb"
 )
 
 func userDataHashSum(d interface{}) string {
@@ -27,6 +28,12 @@ func resourceDomain() *schema.Resource {
 				Optional: true,
 				Computed: true,
 			},
+			"host": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "default",
+				ForceNew: true,
+			},
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -38,6 +45,11 @@ func resourceDomain() *schema.Resource {
 			"memory": {
 				Type:     schema.TypeInt,
 				Required: true,
+			},
+			"network_id": {
+				Type:     schema.TypeString,
+				Required: true,
+				ForceNew: true,
 			},
 			"private_ip": {
 				Type:     schema.TypeString,
@@ -60,20 +72,24 @@ func resourceDomainCreate(ctx context.Context, d *schema.ResourceData, m interfa
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	domain := restvirt.Domain{
+	domain := &pb.Domain{
 		Name:      d.Get("name").(string),
-		VCPU:      d.Get("vcpu").(int),
-		MemoryMiB: d.Get("memory").(int),
+		Vcpu:      uint32(d.Get("vcpu").(int)),
+		Memory:    uint64(d.Get("memory").(int)),
 		UserData:  d.Get("user_data").(string),
-		PrivateIP: d.Get("private_ip").(string),
+		Network:   d.Get("network_id").(string),
+		PrivateIp: d.Get("private_ip").(string),
 	}
 
-	id, err := c.CreateDomain(domain)
+	domain, err := c.DomainServiceClient.CreateDomain(ctx, &pb.CreateDomainRequest{
+		Host:   d.Get("host").(string),
+		Domain: domain,
+	})
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	d.SetId(id)
+	d.SetId(domain.Uuid)
 
 	resourceDomainRead(ctx, d, m)
 
@@ -86,7 +102,10 @@ func resourceDomainRead(ctx context.Context, d *schema.ResourceData, m interface
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	domain, err := c.GetDomain(d.Id())
+	domain, err := c.DomainServiceClient.GetDomain(ctx, &pb.GetDomainRequest{
+		Host: d.Get("host").(string),
+		Uuid: d.Id(),
+	})
 	if _, notFound := err.(*restvirt.NotFoundError); notFound {
 		d.SetId("")
 		return diags
@@ -95,12 +114,14 @@ func resourceDomainRead(ctx context.Context, d *schema.ResourceData, m interface
 		return diag.FromErr(err)
 	}
 
-	d.SetId(domain.UUID)
+	d.SetId(domain.Uuid)
+	d.Set("host", d.Get("host"))
 	d.Set("name", domain.Name)
-	d.Set("vcpu", domain.VCPU)
-	d.Set("memory", domain.MemoryMiB)
+	d.Set("vcpu", domain.Vcpu)
+	d.Set("memory", domain.Memory)
 	d.Set("user_data", userDataHashSum(domain.UserData))
-	d.Set("private_ip", domain.PrivateIP)
+	d.Set("network_id", domain.Network)
+	d.Set("private_ip", domain.PrivateIp)
 
 	return diags
 }
@@ -111,7 +132,10 @@ func resourceDomainDelete(ctx context.Context, d *schema.ResourceData, m interfa
 	// Warning or errors can be collected in a slice type
 	var diags diag.Diagnostics
 
-	err := c.DeleteDomain(d.Id())
+	_, err := c.DomainServiceClient.DeleteDomain(ctx, &pb.DeleteDomainRequest{
+		Host: d.Get("host").(string),
+		Uuid: d.Id(),
+	})
 	if _, notFound := err.(*restvirt.NotFoundError); notFound {
 		return diags
 	}
