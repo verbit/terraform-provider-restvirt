@@ -56,6 +56,11 @@ func resourceDomain() *schema.Resource {
 				Optional: true,
 				ForceNew: true,
 			},
+			"ipv6_address": {
+				Type:     schema.TypeString,
+				Optional: true,
+				ForceNew: true,
+			},
 			"user_data": {
 				Type:      schema.TypeString,
 				Optional:  true,
@@ -73,12 +78,13 @@ func resourceDomainCreate(ctx context.Context, d *schema.ResourceData, m interfa
 	var diags diag.Diagnostics
 
 	domain := &pb.Domain{
-		Name:      d.Get("name").(string),
-		Vcpu:      uint32(d.Get("vcpu").(int)),
-		Memory:    uint64(d.Get("memory").(int)),
-		UserData:  d.Get("user_data").(string),
-		Network:   d.Get("network_id").(string),
-		PrivateIp: d.Get("private_ip").(string),
+		Name:        d.Get("name").(string),
+		Vcpu:        uint32(d.Get("vcpu").(int)),
+		Memory:      uint64(d.Get("memory").(int)),
+		UserData:    d.Get("user_data").(string),
+		Network:     d.Get("network_id").(string),
+		PrivateIp:   d.Get("private_ip").(string),
+		Ipv6Address: d.Get("ipv6_address").(string),
 	}
 
 	domain, err := c.DomainServiceClient.CreateDomain(ctx, &pb.CreateDomainRequest{
@@ -122,6 +128,7 @@ func resourceDomainRead(ctx context.Context, d *schema.ResourceData, m interface
 	d.Set("user_data", userDataHashSum(domain.UserData))
 	d.Set("network_id", domain.Network)
 	d.Set("private_ip", domain.PrivateIp)
+	d.Set("ipv6_address", domain.Ipv6Address)
 
 	return diags
 }

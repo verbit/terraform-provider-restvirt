@@ -30,6 +30,11 @@ func resourceNetwork() *schema.Resource {
 				Required: true,
 				ForceNew: true,
 			},
+			"cidr6": {
+				Type:     schema.TypeString,
+				Optional: true,
+				ForceNew: true,
+			},
 		},
 	}
 }
@@ -41,8 +46,9 @@ func resourceNetworkCreate(ctx context.Context, d *schema.ResourceData, m interf
 	var diags diag.Diagnostics
 
 	network := &pb.Network{
-		Name: d.Get("name").(string),
-		Cidr: d.Get("cidr").(string),
+		Name:  d.Get("name").(string),
+		Cidr:  d.Get("cidr").(string),
+		Cidr6: d.Get("cidr6").(string),
 	}
 
 	network, err := c.DomainServiceClient.CreateNetwork(ctx, &pb.CreateNetworkRequest{
@@ -79,6 +85,7 @@ func resourceNetworkRead(ctx context.Context, d *schema.ResourceData, m interfac
 	d.SetId(network.Uuid)
 	d.Set("name", network.Name)
 	d.Set("cidr", network.Cidr)
+	d.Set("cidr6", network.Cidr6)
 
 	return diags
 }
